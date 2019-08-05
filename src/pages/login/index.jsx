@@ -9,7 +9,8 @@ export default class Index extends Component {
   }
 
   static defaultProps = {
-    userInfo: {}
+    userInfo: {},
+    openId: ''
   }
 
   componentWillMount () { }
@@ -23,14 +24,38 @@ export default class Index extends Component {
   componentDidHide () { }
 
   getOpenId () {
+    wx.cloud.callFunction({
+      name: 'user'
+    }).then(res => {
+      this.props.openId = res.result.openid;
+      this.getIsExist();
+    });
+  }
 
+  getIsExist () {
+    const user = wx.cloud.database().collection('user');
+    user.where({
+      _openid: this.props.openId
+    }).get().then(res => {
+      if (res.data.length === 0) {
+        this.addUser();
+      }
+    });
+  }
+
+  addUser () {
+    const user = wx.cloud.database().collection('user');
+    user.add({
+      data: {
+        user: this.props.userInfo
+      }
+    });
   }
 
   login (e) {
     if (e.target.errMsg === 'getUserInfo:ok') {
       wx.getUserInfo({
         success: (res) => {
-          console.log(res);
           this.props.userInfo = res.userInfo;
           this.getOpenId();
         }

@@ -9,6 +9,10 @@ import './app.scss'
 //   require('nerv-devtools')
 // }
 
+wx.cloud.init({
+  env: 'gongdohuan001-6f2aa5'
+});
+
 class App extends Component {
 
   config = {
