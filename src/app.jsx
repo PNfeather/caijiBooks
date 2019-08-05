@@ -13,13 +13,31 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/index/index'
+      'pages/index/index',
+      'pages/bookList/index'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
+      navigationBarTitleText: '采集图书馆',
       navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      color: "#666",
+      selectedColor: "#1296db",
+      backgroundColor: "#fafafa",
+      borderStyle: 'black',
+      list: [{
+        pagePath: "pages/home/home",
+        iconPath: "./assets/tab-bar/home.png",
+        selectedIconPath: "./assets/tab-bar/home-active.png",
+        text: "首页"
+      }, {
+        pagePath: "pages/user/user",
+        iconPath: "./assets/tab-bar/stack.png",
+        selectedIconPath: "./assets/tab-bar/stack-active.png",
+        text: "书库"
+      }]
     }
   }
 
