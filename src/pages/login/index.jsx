@@ -8,6 +8,10 @@ export default class Index extends Component {
     navigationBarTitleText: '登录'
   }
 
+  static defaultProps = {
+    userInfo: {}
+  }
+
   componentWillMount () { }
 
   componentDidMount () { }
@@ -18,10 +22,26 @@ export default class Index extends Component {
 
   componentDidHide () { }
 
+  getOpenId () {
+
+  }
+
+  login (e) {
+    if (e.target.errMsg === 'getUserInfo:ok') {
+      wx.getUserInfo({
+        success: (res) => {
+          console.log(res);
+          this.props.userInfo = res.userInfo;
+          this.getOpenId();
+        }
+      });
+    }
+  }
+
   render () {
     return (
       <View className='index'>
-        <Button className='loginBtn' type='primary'>登录</Button>
+        <Button className='loginBtn' type='primary' lang='zh_CN' open-type='getUserInfo' onGetUserInfo={this.login}>登录</Button>
       </View>
     )
   }
