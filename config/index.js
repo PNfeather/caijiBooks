@@ -46,6 +46,12 @@ const config = {
   },
   defineConstants: {
   },
+  alias: {
+    '@assets': path.resolve(__dirname, '..', 'src/assets'),
+    '@components': path.resolve(__dirname, '..', 'src/components'),
+    '@styles': path.resolve(__dirname, '..', 'src/styles'),
+    '@utils': path.resolve(__dirname, '..', 'src/utils')
+  },
   copy: {
     patterns: [
     ],

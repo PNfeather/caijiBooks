@@ -1,5 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
+import { InputItem } from '@components'
 import './index.scss'
 
 export default class Index extends Component {
@@ -11,6 +12,13 @@ export default class Index extends Component {
   static defaultProps = {
     userInfo: {},
     openId: ''
+  }
+
+  state = {
+    name: '',
+    section: '',
+    btnText: '授权',
+    authorization: true // todo 待修改或完善
   }
 
   componentWillMount () { }
@@ -38,7 +46,9 @@ export default class Index extends Component {
       _openid: this.props.openId
     }).get().then(res => {
       if (res.data.length === 0) {
-        this.addUser();
+        this.setState({ authorization: true , btnText: '登录'})
+      } else {
+        console.log(res.data[0]);
       }
     });
   }
@@ -63,10 +73,29 @@ export default class Index extends Component {
     }
   }
 
+  handleInput = (key, value) => {
+    this.setState({ [key]: value })
+  }
+
   render () {
+    const { name, section, btnText, authorization } = this.state
     return (
       <View className='index'>
-        <Button className='loginBtn' type='primary' lang='zh_CN' open-type='getUserInfo' onGetUserInfo={this.login}>登录</Button>
+        {authorization &&
+        <View className='inputBorder'>
+          <InputItem
+            value={name}
+            placeholder='请输入姓名'
+            onInput={this.handleInput.bind(this, 'username')}
+          />
+          <InputItem
+            value={section}
+            placeholder='请输入部门'
+            onInput={this.handleInput.bind(this, 'password')}
+          />
+        </View>
+        }
+        <Button className='loginBtn' type='primary' lang='zh_CN' open-type='getUserInfo' onGetUserInfo={this.login}>{btnText}</Button>
       </View>
     )
   }
