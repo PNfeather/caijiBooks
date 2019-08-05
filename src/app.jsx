@@ -28,12 +28,12 @@ class App extends Component {
       backgroundColor: "#fafafa",
       borderStyle: 'black',
       list: [{
-        pagePath: "pages/home/home",
+        pagePath: "pages/index/index",
         iconPath: "./assets/tab-bar/home.png",
         selectedIconPath: "./assets/tab-bar/home-active.png",
         text: "首页"
       }, {
-        pagePath: "pages/user/user",
+        pagePath: "pages/bookList/index",
         iconPath: "./assets/tab-bar/stack.png",
         selectedIconPath: "./assets/tab-bar/stack-active.png",
         text: "书库"

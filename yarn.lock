@@ -120,11 +120,17 @@
   dependencies:
     babel-core "^6.26.0"
 
-"@tarojs/plugin-csso@1.3.11":
-  version "1.3.11"
-  resolved "https://registry.npm.taobao.org/@tarojs/plugin-csso/download/@tarojs/plugin-csso-1.3.11.tgz#36a3d7ba5553faa0efb67e8bbe1aca455dff5202"
+"@tarojs/plugin-csso@^1.3.12":
+  version "1.3.12"
+  resolved "https://registry.npm.taobao.org/@tarojs/plugin-csso/download/@tarojs/plugin-csso-1.3.12.tgz#7dbb971cf40aea4cacd9c34d8b10b031a955bb98"
   dependencies:
     csso "^3.5.0"
+
+"@tarojs/plugin-less@^1.3.12":
+  version "1.3.12"
+  resolved "https://registry.npm.taobao.org/@tarojs/plugin-less/download/@tarojs/plugin-less-1.3.12.tgz#aa63e3c911a1eaa34659ddf5bdc05b2bbdd78ba5"
+  dependencies:
+    less "^3.0.4"
 
 "@tarojs/plugin-sass@1.3.11":
   version "1.3.11"
@@ -1824,7 +1830,7 @@ clone@^1.0.2:
   version "1.0.4"
   resolved "https://registry.npm.taobao.org/clone/download/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
 
-clone@^2.1.1:
+clone@^2.1.1, clone@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npm.taobao.org/clone/download/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
 
@@ -4194,6 +4200,21 @@ less-loader@4.1.0:
 less@3.0.4:
   version "3.0.4"
   resolved "https://registry.npm.taobao.org/less/download/less-3.0.4.tgz?cache=0&sync_timestamp=1564855394771&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fless%2Fdownload%2Fless-3.0.4.tgz#d27dcedbac96031c9e7b76f1da1e4b7d83760814"
+  optionalDependencies:
+    errno "^0.1.1"
+    graceful-fs "^4.1.2"
+    image-size "~0.5.0"
+    mime "^1.4.1"
+    mkdirp "^0.5.0"
+    promise "^7.1.1"
+    request "^2.83.0"
+    source-map "~0.6.0"
+
+less@^3.0.4:
+  version "3.9.0"
+  resolved "https://registry.npm.taobao.org/less/download/less-3.9.0.tgz?cache=0&sync_timestamp=1564855394771&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fless%2Fdownload%2Fless-3.9.0.tgz#b7511c43f37cf57dc87dffd9883ec121289b1474"
+  dependencies:
+    clone "^2.1.2"
   optionalDependencies:
     errno "^0.1.1"
     graceful-fs "^4.1.2"
