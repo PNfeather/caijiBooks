@@ -18,7 +18,7 @@ export default class Index extends Component {
     name: '',
     section: '',
     btnText: '授权',
-    authorization: true // todo 待修改或完善
+    authorization: false
   }
 
   componentWillMount () { }
@@ -48,7 +48,9 @@ export default class Index extends Component {
       if (res.data.length === 0) {
         this.setState({ authorization: true , btnText: '登录'})
       } else {
-        console.log(res.data[0]);
+        Taro.switchTab({
+          url: '/pages/index/index'
+        })
       }
     });
   }
@@ -59,17 +61,41 @@ export default class Index extends Component {
       data: {
         user: this.props.userInfo
       }
+    }).then(res => {
+      console.log(res);
+      Taro.switchTab({
+        url: '/pages/index/index'
+      })
     });
   }
 
   login (e) {
-    if (e.target.errMsg === 'getUserInfo:ok') {
-      wx.getUserInfo({
-        success: (res) => {
-          this.props.userInfo = res.userInfo;
-          this.getOpenId();
-        }
-      });
+    if (this.state.authorization) {
+      const {name, section} = this.state
+      if (name === '') {
+        return Taro.showToast({
+          title: '请输入姓名~',
+          icon: 'none'
+        })
+      }
+      if (section === '') {
+        return Taro.showToast({
+          title: '请输入部门~',
+          icon: 'none'
+        })
+      }
+      this.props.userInfo.name = name
+      this.props.userInfo.section = section
+      this.addUser()
+    } else {
+      if (e.target.errMsg === 'getUserInfo:ok') {
+        wx.getUserInfo({
+          success: (res) => {
+            this.props.userInfo = res.userInfo;
+            this.getOpenId();
+          }
+        });
+      }
     }
   }
 
@@ -86,12 +112,12 @@ export default class Index extends Component {
           <InputItem
             value={name}
             placeholder='请输入姓名'
-            onInput={this.handleInput.bind(this, 'username')}
+            onInput={this.handleInput.bind(this, 'name')}
           />
           <InputItem
             value={section}
             placeholder='请输入部门'
-            onInput={this.handleInput.bind(this, 'password')}
+            onInput={this.handleInput.bind(this, 'section')}
           />
         </View>
         }
