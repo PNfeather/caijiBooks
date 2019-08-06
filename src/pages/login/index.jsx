@@ -92,6 +92,7 @@ export default class Index extends Component {
       }
       let userInfo = Object.assign({}, this.state.userInfo, {name}, {section})
       this.setState({userInfo: userInfo})
+      this.props.changeUserInfo(userInfo)
       this.addUser()
     } else {
       if (e.target.errMsg === 'getUserInfo:ok') {
