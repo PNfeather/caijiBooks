@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { ScrollView, View, Image, Text } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import getBookInfo from '@utils/getBookInfo'
 import './index.scss'
 
@@ -22,7 +22,7 @@ export default class BookInfoView extends Component {
     const {bookInfo} = this.state
     console.log(bookInfo);
     return (
-      <ScrollView className='bookDetail' scrollY='true'>
+      <View className='bookDetail' scrollY='true'>
         <View className='image'>
           <Image
             src={bookInfo.pic}
@@ -31,17 +31,17 @@ export default class BookInfoView extends Component {
           />
         </View>
         <View className='bookTextInfo'>
-          <Text>书名: 《{bookInfo.title}》</Text>
-          <Text>作者: {bookInfo.author}</Text>
-          <Text>科类: {bookInfo.subtitle}</Text>
-          <Text>出版社: {bookInfo.publisher}</Text>
-          <Text>出版地址: {bookInfo.pubplace}</Text>
-          <Text>出版时间: {bookInfo.pubdate}</Text>
-          <Text>定价: ￥{bookInfo.price}</Text>
-          <Text>装订/版本/页数: {bookInfo.binding}/{bookInfo.edition}/{bookInfo.page}</Text>
+          <View>书名: 《{bookInfo.title}》</View>
+          <View>作者: {bookInfo.author}</View>
+          <View>科类: {bookInfo.subtitle}</View>
+          <View>出版社: {bookInfo.publisher}</View>
+          <View>出版地址: {bookInfo.pubplace}</View>
+          <View>出版时间: {bookInfo.pubdate}</View>
+          <View>定价: ￥{bookInfo.price}</View>
+          <View>装订/版本/页数: {bookInfo.binding}/{bookInfo.edition}/{bookInfo.page}</View>
+          <View className='margin_top'>简介: {bookInfo.summary}</View>
         </View>
-        书籍详情
-      </ScrollView>
+      </View>
     )
   }
 }
