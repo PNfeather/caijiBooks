@@ -91,9 +91,12 @@ export default class Index extends Component {
         })
       }
       let userInfo = Object.assign({}, this.state.userInfo, {name}, {section})
+      console.log(userInfo);
       this.setState({userInfo: userInfo})
       this.props.changeUserInfo(userInfo)
-      this.addUser()
+      setTimeout(() => {
+        this.addUser()
+      })
     } else {
       if (e.target.errMsg === 'getUserInfo:ok') {
         wx.getUserInfo({
