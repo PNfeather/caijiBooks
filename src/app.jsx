@@ -27,7 +27,8 @@ class App extends Component {
 
       'pages/login/index',
       // 'pages/index/index',
-      'pages/bookList/index'
+      'pages/bookList/index',
+      'pages/donateBook/index'
     ],
     window: {
       backgroundTextStyle: 'light',

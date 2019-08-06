@@ -5,7 +5,6 @@ import donate from './assets/donate.png'
 import repay from './assets/repay.png'
 import remove from './assets/remove.png'
 import './index.scss'
-import getBookInfo from './common'
 import { connect } from '@tarojs/redux'
 
 @connect(({user}) => {return {userInfo: user.userInfo} })
@@ -29,16 +28,15 @@ export default class Index extends Component {
   componentDidHide () { }
 
   donateBook () {
-    this.scanAndGetBookInfo(bookInfo => {
-      console.log(bookInfo);
-    })
-  }
-
-  scanAndGetBookInfo (callBack) {
     Taro.scanCode().then((res) => {
-      getBookInfo(res.result, callBack)
-    }).catch((err) => {
-      console.log(err.errMsg);
+      wx.navigateTo({
+        url: `/pages/donateBook/index?isbn=${res.result}`
+      })
+    }).catch(() => {
+      Taro.showToast({
+        title: '扫码异常',
+        icon: 'none'
+      })
     })
   }
 
