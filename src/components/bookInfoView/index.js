@@ -1,24 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
-import getBookInfo from '@utils/getBookInfo'
 import './index.scss'
 
 export default class BookInfoView extends Component {
 
-  state = {
-    bookInfo: {}
-  }
-
-  componentDidMount () {
-    // getBookInfo(this.props.isbn, (res) => { // todo 待修改或完善
-    getBookInfo('9787111548973', (res) => {
-      const bookInfo = res.bookInfo
-      this.setState({bookInfo: bookInfo})
-    })
-  }
-
   render () {
-    const {bookInfo} = this.state
+    const {bookInfo} = this.props
     return (
       <View className='bookDetail' scrollY='true'>
         <View className='image'>

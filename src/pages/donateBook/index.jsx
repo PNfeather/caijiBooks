@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import { BookInfoView, InputItem } from '@components'
 import './index.scss'
+import getBookInfo from '@utils/getBookInfo'
 import { connect } from '@tarojs/redux'
 
 @connect(({user}) => {return {userInfo: user.userInfo} })
@@ -17,7 +18,8 @@ export default class Index extends Component {
   }
 
   state = {
-    name: ''
+    name: '',
+    bookInfo: {}
   }
 
   componentWillMount () {
@@ -25,7 +27,13 @@ export default class Index extends Component {
     this.setState({name: this.props.userInfo.name})
   }
 
-  componentDidMount () { }
+  componentDidMount () {
+    // getBookInfo(this.props.isbn, (res) => { // todo 待修改或完善
+    getBookInfo('9787111548973', (res) => {
+      const bookInfo = res
+      this.setState({bookInfo: bookInfo})
+    })
+  }
 
   componentWillUnmount () { }
 
@@ -44,7 +52,7 @@ export default class Index extends Component {
     })
       .then(res => {
         if (res.confirm) {
-
+          console.log(this.state);
         }
       })
   }
@@ -54,7 +62,7 @@ export default class Index extends Component {
   }
 
   render () {
-    const { name } = this.state
+    const { name, bookInfo } = this.state
     return (
       <View className='index'>
         <View className='BtnGroup'>
@@ -70,7 +78,7 @@ export default class Index extends Component {
           />
         </View>
         <BookInfoView
-          isbn={this.props.isbn}
+          bookInfo={bookInfo.bookInfo}
         />
       </View>
     )

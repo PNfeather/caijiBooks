@@ -22,10 +22,7 @@ export default function getBookInfo(isbn, callback) {
             }
           }).then(addRes => {
             console.log(addRes);
-            callback({
-              isbn: isbn,
-              bookInfo: inRes.data.result
-            })
+            getBookInfo(isbn, callback)
           });
         }
       })
