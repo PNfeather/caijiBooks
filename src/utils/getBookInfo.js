@@ -15,10 +15,18 @@ export default function getBookInfo(isbn, callback) {
         data: {},
         method: 'get',
         success: function (inRes) {
-          callback({
-            isbn: isbn,
-            bookInfo: inRes.data.result
-          })
+          bookList.add({
+            data: {
+              isbn: isbn,
+              bookInfo: inRes.data.result
+            }
+          }).then(addRes => {
+            console.log(addRes);
+            callback({
+              isbn: isbn,
+              bookInfo: inRes.data.result
+            })
+          });
         }
       })
     } else {
