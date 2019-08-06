@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
+import { BookInfoView } from '@components'
 import './index.scss'
-import getBookInfo from '@utils/getBookInfo'
 
 export default class Index extends Component {
 
@@ -9,10 +9,12 @@ export default class Index extends Component {
     navigationBarTitleText: '捐书'
   }
 
+  static defaultProps = {
+    isbn: ''
+  }
+
   componentWillMount () {
-    getBookInfo(this.$router.params.isbn, (res) => {
-      console.log(res);
-    })
+    this.props.isbn = this.$router.params.isbn
   }
 
   componentDidMount () { }
@@ -26,7 +28,9 @@ export default class Index extends Component {
   render () {
     return (
       <View className='index'>
-        <Text>Hello world!</Text>
+        <BookInfoView
+          isbn={this.props.isbn}
+        />
       </View>
     )
   }

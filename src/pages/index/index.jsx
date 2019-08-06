@@ -16,7 +16,7 @@ export default class Index extends Component {
   }
 
   componentWillMount () {
-    console.log(this.props)
+    // console.log(this.props)
   }
 
   componentDidMount () { }
