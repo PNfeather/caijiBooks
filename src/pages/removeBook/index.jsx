@@ -10,7 +10,7 @@ import { connect } from '@tarojs/redux'
 export default class Index extends Component {
 
   config = {
-    navigationBarTitleText: '借书'
+    navigationBarTitleText: '撤捐'
   }
 
   static defaultProps = {
@@ -20,7 +20,7 @@ export default class Index extends Component {
   state = {
     name: '',
     bookInfo: {},
-    borrowToggle: false
+    removeToggle: false
   }
 
   componentWillMount () {
@@ -39,7 +39,7 @@ export default class Index extends Component {
     wx.navigateBack()
   }
 
-  borrowBook () {
+  removeBook () {
     const { name, bookInfo } = this.state
     if (bookInfo.donateName === '' || bookInfo.donateName === undefined) {
       return Taro.showToast({
@@ -48,36 +48,44 @@ export default class Index extends Component {
         duration: 5000
       })
     }
-    if (bookInfo.borrowName !== '' && bookInfo.borrowName !== undefined) {
+    if (name !== bookInfo.donateName) {
       return Taro.showToast({
-        title: '当前书籍' + bookInfo.borrowName + '正在借阅',
+        title: '当前书籍不是已您的名义捐赠的哦~',
         icon: 'none',
         duration: 5000
       })
-    } else {
-      Taro.showModal({
-        title: '借书',
-        content: '确认借阅《' + bookInfo.bookInfo.title + '》',
-      }).then(res => {
-          if (res.confirm) {
-            const bookList = wx.cloud.database().collection('bookList');
-            bookList.doc(bookInfo._id).update({
-              data: {
-                borrowName: name
-              },
-              success: () => {
-                const currentInfo = Object.assign({}, bookInfo, {borrowName: name})
-                this.setState({borrowToggle: true, bookInfo: currentInfo})
-                Taro.showToast({
-                  title: '借阅成功',
-                  icon: 'success',
-                  duration: 5000
-                })
-              }
+    }
+    if (bookInfo.donateName === '匿名') {
+      return Taro.showToast({
+        title: '当前书籍是匿名捐赠，无法撤捐哦~',
+        icon: 'none',
+        duration: 5000
+      })
+    }
+
+    Taro.showModal({
+      title: '撤捐',
+      content: '确认撤销《' + bookInfo.bookInfo.title + '》的捐赠',
+    }).then(res => {
+      if (res.confirm) {
+        const bookList = wx.cloud.database().collection('bookList');
+        bookList.doc(bookInfo._id).update({
+          data: {
+            donateName: '',
+            borrowName: ''
+          },
+          success: () => {
+            const currentInfo = Object.assign({}, bookInfo, {donateName: '', borrowName: ''})
+            this.setState({removeToggle: true, bookInfo: currentInfo})
+            Taro.showToast({
+              title: '您已撤销了本书的捐赠',
+              icon: 'success',
+              duration: 5000
             })
           }
-        })
-    }
+        });
+      }
+    })
   }
 
   render () {
@@ -86,7 +94,7 @@ export default class Index extends Component {
       <View className='index'>
         <View className='BtnGroup'>
           <Button className='btn' size='mini' type='primary' onClick={this.back}>返回</Button>
-          <Button disabled={this.state.borrowToggle} className='btn' size='mini' type='primary' onClick={this.borrowBook}>借书</Button>
+          <Button disabled={this.state.removeToggle} className='btn' size='mini' type='primary' onClick={this.removeBook}>撤捐</Button>
         </View>
         {
           bookInfo.borrowName &&

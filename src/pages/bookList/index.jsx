@@ -5,7 +5,7 @@ import './index.scss'
 export default class Index extends Component {
 
   config = {
-    navigationBarTitleText: '采集图书馆'
+    navigationBarTitleText: '采集书库'
   }
 
   componentWillMount () { }

@@ -48,7 +48,8 @@ export default class Index extends Component {
         duration: 5000
       })
     } else {
-      const contentText = name ? ('是否确定以' + name + '的名义捐赠本书') : ('是否确定匿名捐赠本书')
+      const bookName = '《' + bookInfo.bookInfo.title + '》'
+      const contentText = name ? ('是否确定以' + name + '的名义捐赠' + bookName) : ('是否确定匿名捐赠' + bookName)
       Taro.showModal({
         title: '捐书',
         content: contentText,

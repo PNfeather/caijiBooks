@@ -10,7 +10,7 @@ import { connect } from '@tarojs/redux'
 export default class Index extends Component {
 
   config = {
-    navigationBarTitleText: '借书'
+    navigationBarTitleText: '还书'
   }
 
   static defaultProps = {
@@ -20,7 +20,7 @@ export default class Index extends Component {
   state = {
     name: '',
     bookInfo: {},
-    borrowToggle: false
+    repayToggle: false
   }
 
   componentWillMount () {
@@ -39,7 +39,7 @@ export default class Index extends Component {
     wx.navigateBack()
   }
 
-  borrowBook () {
+  repayBook () {
     const { name, bookInfo } = this.state
     if (bookInfo.donateName === '' || bookInfo.donateName === undefined) {
       return Taro.showToast({
@@ -48,33 +48,33 @@ export default class Index extends Component {
         duration: 5000
       })
     }
-    if (bookInfo.borrowName !== '' && bookInfo.borrowName !== undefined) {
+    if (name !== bookInfo.borrowName) {
       return Taro.showToast({
-        title: '当前书籍' + bookInfo.borrowName + '正在借阅',
+        title: '您未借阅本书',
         icon: 'none',
         duration: 5000
       })
     } else {
       Taro.showModal({
-        title: '借书',
-        content: '确认借阅《' + bookInfo.bookInfo.title + '》',
+        title: '还书',
+        content: '确认归还《' + bookInfo.bookInfo.title + '》',
       }).then(res => {
           if (res.confirm) {
             const bookList = wx.cloud.database().collection('bookList');
             bookList.doc(bookInfo._id).update({
               data: {
-                borrowName: name
+                borrowName: ''
               },
               success: () => {
-                const currentInfo = Object.assign({}, bookInfo, {borrowName: name})
-                this.setState({borrowToggle: true, bookInfo: currentInfo})
+                const currentInfo = Object.assign({}, bookInfo, {borrowName: ''})
+                this.setState({repayToggle: true, bookInfo: currentInfo})
                 Taro.showToast({
-                  title: '借阅成功',
+                  title: '您已归还书籍',
                   icon: 'success',
                   duration: 5000
                 })
               }
-            })
+            });
           }
         })
     }
@@ -86,7 +86,7 @@ export default class Index extends Component {
       <View className='index'>
         <View className='BtnGroup'>
           <Button className='btn' size='mini' type='primary' onClick={this.back}>返回</Button>
-          <Button disabled={this.state.borrowToggle} className='btn' size='mini' type='primary' onClick={this.borrowBook}>借书</Button>
+          <Button disabled={this.state.repayToggle} className='btn' size='mini' type='primary' onClick={this.repayBook}>还书</Button>
         </View>
         {
           bookInfo.borrowName &&
