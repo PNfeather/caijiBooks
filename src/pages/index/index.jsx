@@ -5,6 +5,9 @@ import donate from './assets/donate.png'
 import repay from './assets/repay.png'
 import remove from './assets/remove.png'
 import './index.scss'
+import { connect } from '@tarojs/redux'
+
+@connect(({user}) => {return {userInfo: user.userInfo} })
 
 export default class Index extends Component {
 
@@ -12,7 +15,9 @@ export default class Index extends Component {
     navigationBarTitleText: '首页'
   }
 
-  componentWillMount () { }
+  componentWillMount () {
+    console.log(this.props);
+  }
 
   componentDidMount () { }
 

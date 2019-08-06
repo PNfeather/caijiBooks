@@ -2,6 +2,14 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import { InputItem } from '@components'
 import './index.scss'
+import { connect } from '@tarojs/redux'
+import dispatchUserInfo from '@actions/user'
+
+@connect(state => state, (dispatch) => ({
+  changeUserInfo (data) {
+    dispatch(dispatchUserInfo(data))
+  }
+}))
 
 export default class Index extends Component {
 
@@ -9,12 +17,9 @@ export default class Index extends Component {
     navigationBarTitleText: '登录'
   }
 
-  static defaultProps = {
-    userInfo: {},
-    openId: ''
-  }
-
   state = {
+    userInfo: {},
+    openId: '',
     name: '',
     section: '',
     btnText: '授权',
@@ -35,7 +40,7 @@ export default class Index extends Component {
     wx.cloud.callFunction({
       name: 'user'
     }).then(res => {
-      this.props.openId = res.result.openid;
+      this.setState({ openId: res.result.openid})
       this.getIsExist();
     });
   }
@@ -43,11 +48,12 @@ export default class Index extends Component {
   getIsExist () {
     const user = wx.cloud.database().collection('user');
     user.where({
-      _openid: this.props.openId
+      _openid: this.state.openId
     }).get().then(res => {
       if (res.data.length === 0) {
         this.setState({ authorization: true , btnText: '登录'})
       } else {
+        this.props.changeUserInfo(res.data[0].user)
         Taro.switchTab({
           url: '/pages/index/index'
         })
@@ -59,7 +65,7 @@ export default class Index extends Component {
     const user = wx.cloud.database().collection('user');
     user.add({
       data: {
-        user: this.props.userInfo
+        user: this.state.userInfo
       }
     }).then(res => {
       console.log(res);
@@ -84,14 +90,14 @@ export default class Index extends Component {
           icon: 'none'
         })
       }
-      this.props.userInfo.name = name
-      this.props.userInfo.section = section
+      let userInfo = Object.assign({}, this.state.userInfo, {name}, {section})
+      this.setState({userInfo: userInfo})
       this.addUser()
     } else {
       if (e.target.errMsg === 'getUserInfo:ok') {
         wx.getUserInfo({
           success: (res) => {
-            this.props.userInfo = res.userInfo;
+            this.setState({userInfo: res.userInfo})
             this.getOpenId();
           }
         });
