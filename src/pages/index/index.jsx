@@ -12,20 +12,10 @@ export default class Index extends Component {
     navigationBarTitleText: '首页'
   }
 
-  componentWillMount () {}
-
-  componentDidMount () { }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
-
-  donateBook () {
+  scanBook (type) {
     Taro.scanCode().then((res) => {
       wx.navigateTo({
-        url: `/pages/donateBook/index?isbn=${res.result}`
+        url: `/pages/${type}/index?isbn=${res.result}`
       })
     }).catch(() => {
       Taro.showToast({
@@ -35,17 +25,33 @@ export default class Index extends Component {
     })
   }
 
+  borrowBook () {
+    this.scanBook('borrowBook')
+  }
+
+  repayBook () {
+    this.scanBook('repayBook')
+  }
+
+  donateBook () {
+    this.scanBook('donateBook')
+  }
+
+  removeBook () {
+    this.scanBook('removeBook')
+  }
+
   render () {
     return (
       <View className='index'>
         <View className='item'>
-          <View className='border'>
+          <View className='border' onClick={this.borrowBook}>
             <Image className='icon' src={borrow}></Image>
             <Text className='text'>借书</Text>
           </View>
         </View>
         <View className='item'>
-          <View className='border'>
+          <View className='border' onClick={this.repayBook}>
             <Image className='icon' src={repay}></Image>
             <Text className='text'>还书</Text>
           </View>
@@ -57,7 +63,7 @@ export default class Index extends Component {
           </View>
         </View>
         <View className='item'>
-          <View className='border'>
+          <View className='border' onClick={this.removeBook}>
             <Image className='icon' src={remove}></Image>
             <Text className='text'>撤捐</Text>
           </View>
