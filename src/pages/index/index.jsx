@@ -5,6 +5,7 @@ import donate from './assets/donate.png'
 import repay from './assets/repay.png'
 import remove from './assets/remove.png'
 import './index.scss'
+import getBookInfo from './common'
 import { connect } from '@tarojs/redux'
 
 @connect(({user}) => {return {userInfo: user.userInfo} })
@@ -16,7 +17,7 @@ export default class Index extends Component {
   }
 
   componentWillMount () {
-    console.log(this.props);
+    console.log(this.props)
   }
 
   componentDidMount () { }
@@ -26,6 +27,20 @@ export default class Index extends Component {
   componentDidShow () { }
 
   componentDidHide () { }
+
+  donateBook () {
+    this.scanAndGetBookInfo(bookInfo => {
+      console.log(bookInfo);
+    })
+  }
+
+  scanAndGetBookInfo (callBack) {
+    Taro.scanCode().then((res) => {
+      getBookInfo(res.result, callBack)
+    }).catch((err) => {
+      console.log(err.errMsg);
+    })
+  }
 
   render () {
     return (
@@ -43,7 +58,7 @@ export default class Index extends Component {
           </View>
         </View>
         <View className='item'>
-          <View className='border'>
+          <View className='border' onClick={this.donateBook}>
             <Image className='icon' src={donate}></Image>
             <Text className='text'>捐书</Text>
           </View>
