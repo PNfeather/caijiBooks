@@ -10,9 +10,8 @@ export default class BookInfoView extends Component {
   }
 
   componentDidMount () {
-    console.log(this.props);
-    // getBookInfo(this.props.isbn, (res) => { // todo 待修改或完善
-    getBookInfo('9787111548973', (res) => {
+    getBookInfo(this.props.isbn, (res) => { // todo 待修改或完善
+    // getBookInfo('9787111548973', (res) => {
       const bookInfo = res.bookInfo
       this.setState({bookInfo: bookInfo})
     })
@@ -20,7 +19,6 @@ export default class BookInfoView extends Component {
 
   render () {
     const {bookInfo} = this.state
-    console.log(bookInfo);
     return (
       <View className='bookDetail' scrollY='true'>
         <View className='image'>

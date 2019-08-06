@@ -41,7 +41,9 @@ export default class Index extends Component {
       name: 'user'
     }).then(res => {
       this.setState({ openId: res.result.openid})
-      this.getIsExist();
+      setTimeout(() => {
+        this.getIsExist();
+      })
     });
   }
 
