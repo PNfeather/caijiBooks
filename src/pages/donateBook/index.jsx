@@ -47,31 +47,30 @@ export default class Index extends Component {
         icon: 'none',
         duration: 5000
       })
-    } else {
-      const bookName = '《' + bookInfo.bookInfo.title + '》'
-      const contentText = name ? ('是否确定以' + name + '的名义捐赠' + bookName) : ('是否确定匿名捐赠' + bookName)
-      Taro.showModal({
-        title: '捐书',
-        content: contentText,
-      }).then(res => {
-        if (res.confirm) {
-          const bookList = wx.cloud.database().collection('bookList');
-          bookList.doc(bookInfo._id).update({
-            data: {
-              donateName: name || '匿名'
-            },
-            success: () => {
-              this.setState({donateToggle: true})
-              Taro.showToast({
-                title: '感谢您的捐赠',
-                icon: 'success',
-                duration: 5000
-              })
-            }
-          });
-        }
-      })
     }
+    const bookName = '《' + bookInfo.bookInfo.title + '》'
+    const contentText = name ? ('是否确定以' + name + '的名义捐赠' + bookName) : ('是否确定匿名捐赠' + bookName)
+    Taro.showModal({
+      title: '捐书',
+      content: contentText,
+    }).then(res => {
+      if (res.confirm) {
+        const bookList = wx.cloud.database().collection('bookList');
+        bookList.doc(bookInfo._id).update({
+          data: {
+            donateName: name || '匿名'
+          },
+          success: () => {
+            this.setState({donateToggle: true})
+            Taro.showToast({
+              title: '感谢您的捐赠',
+              icon: 'success',
+              duration: 5000
+            })
+          }
+        });
+      }
+    })
   }
 
   handleInput = (key, value) => {

@@ -62,6 +62,13 @@ export default class Index extends Component {
         duration: 5000
       })
     }
+    if (bookInfo.borrowName && (bookInfo.borrowName !== name)) {
+      return Taro.showToast({
+        title: '书籍' + bookInfo.borrowName + '借阅中，请先联系借阅人换书才可撤捐哦' ,
+        icon: 'none',
+        duration: 5000
+      })
+    }
 
     Taro.showModal({
       title: '撤捐',

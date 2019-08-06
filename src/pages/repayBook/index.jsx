@@ -54,30 +54,29 @@ export default class Index extends Component {
         icon: 'none',
         duration: 5000
       })
-    } else {
-      Taro.showModal({
-        title: '还书',
-        content: '确认归还《' + bookInfo.bookInfo.title + '》',
-      }).then(res => {
-          if (res.confirm) {
-            const bookList = wx.cloud.database().collection('bookList');
-            bookList.doc(bookInfo._id).update({
-              data: {
-                borrowName: ''
-              },
-              success: () => {
-                const currentInfo = Object.assign({}, bookInfo, {borrowName: ''})
-                this.setState({repayToggle: true, bookInfo: currentInfo})
-                Taro.showToast({
-                  title: '您已归还书籍',
-                  icon: 'success',
-                  duration: 5000
-                })
-              }
-            });
-          }
-        })
     }
+    Taro.showModal({
+      title: '还书',
+      content: '确认归还《' + bookInfo.bookInfo.title + '》',
+    }).then(res => {
+        if (res.confirm) {
+          const bookList = wx.cloud.database().collection('bookList');
+          bookList.doc(bookInfo._id).update({
+            data: {
+              borrowName: ''
+            },
+            success: () => {
+              const currentInfo = Object.assign({}, bookInfo, {borrowName: ''})
+              this.setState({repayToggle: true, bookInfo: currentInfo})
+              Taro.showToast({
+                title: '您已归还书籍',
+                icon: 'success',
+                duration: 5000
+              })
+            }
+          });
+        }
+      })
   }
 
   render () {
