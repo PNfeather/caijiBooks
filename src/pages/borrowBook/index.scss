@@ -1,0 +1,13 @@
+.BtnGroup{
+  height: 100px;
+  padding: 0 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .btn{
+    margin: 0;
+  }
+}
+.donateName{
+  padding: 30px;
+}
