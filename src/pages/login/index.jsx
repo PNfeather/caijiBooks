@@ -26,15 +26,19 @@ export default class Index extends Component {
     authorization: false
   }
 
-  componentWillMount () { }
-
-  componentDidMount () { }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
+  componentWillMount () {
+    wx.getStorage({
+      key: 'CAIJI_CURRENTUSERINFO',
+      success: (res) => {
+        if (res && res.data) {
+          this.changeAndStoreUserInfo(res.data, true)
+          Taro.switchTab({
+            url: '/pages/index/index'
+          })
+        }
+      }
+    })
+  }
 
   getOpenId () {
     wx.cloud.callFunction({
@@ -47,6 +51,11 @@ export default class Index extends Component {
     });
   }
 
+  changeAndStoreUserInfo (data, dontStore) {
+    this.props.changeUserInfo(data);
+    !dontStore && wx.setStorageSync('CAIJI_CURRENTUSERINFO', data)
+  }
+
   getIsExist () {
     const user = wx.cloud.database().collection('user');
     user.where({
@@ -55,7 +64,7 @@ export default class Index extends Component {
       if (res.data.length === 0) {
         this.setState({ authorization: true , btnText: '登录'})
       } else {
-        this.props.changeUserInfo(res.data[0].user)
+        this.changeAndStoreUserInfo(res.data[0].user)
         Taro.switchTab({
           url: '/pages/index/index'
         })
@@ -95,7 +104,7 @@ export default class Index extends Component {
       let userInfo = Object.assign({}, this.state.userInfo, {name}, {section})
       console.log(userInfo);
       this.setState({userInfo: userInfo})
-      this.props.changeUserInfo(userInfo)
+      this.changeAndStoreUserInfo(userInfo)
       setTimeout(() => {
         this.addUser()
       })
