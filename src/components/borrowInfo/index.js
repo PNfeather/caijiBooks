@@ -1,12 +1,21 @@
 import Taro, { Component } from '@tarojs/taro'
-import {View, Text} from '@tarojs/components'
+import {View, Text, Image} from '@tarojs/components'
 import './index.scss'
 import formatTime from '@utils/formatTime'
 
 export default class BorrowInfo extends Component {
 
+  state = {
+    detailToggle: false
+  }
+
+  changeToggle () {
+    this.setState({detailToggle: !this.state.detailToggle})
+  }
+
   render () {
-    const {borrowName, borrowTime} = this.props
+    const {borrowName, borrowTime, borrowDetail} = this.props
+    const {detailToggle} = this.state
     return (
       <View>
         {
@@ -17,8 +26,21 @@ export default class BorrowInfo extends Component {
         }
         {
           borrowName &&
-          <View className='borrowName'>
-            本书于{formatTime(borrowTime, 'YYYY年MM月DD日')},<Text className='heightLight'>{borrowName}</Text>借阅
+          <View>
+            <View className='borrowName flexBlock' onClick={this.changeToggle.bind(this)}>
+              <View>
+                当前借阅人: <Text className='heightLight'>{borrowName}</Text>
+              </View>
+              <View className={'pullIcon ' + (detailToggle ? 'pullDownState' : 'pullUpState')} />
+            </View>
+            {
+              detailToggle &&
+              <View>
+                <View>借阅人头像: <Image src={borrowDetail.avatarUrl}></Image></View>
+                <View>借阅日期: {borrowTime}</View>
+                <View>借阅人昵称: {borrowDetail.nickName}</View>
+              </View>
+            }
           </View>
         }
       </View>

@@ -107,13 +107,14 @@ export default class Index extends Component {
         <DonateInfo
           donateName={bookInfo.donateName}
           donateTime={bookInfo.donateTime}
-        ></DonateInfo>
+        />
         {
           !removeToggle &&
           <BorrowInfo
             borrowName={bookInfo.borrowName}
             borrowTime={bookInfo.borrowTime}
-          ></BorrowInfo>
+            borrowDetail={bookInfo.borrowDetail}
+          />
         }
         <BookInfoView
           bookInfo={bookInfo.bookInfo}

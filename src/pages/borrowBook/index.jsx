@@ -59,7 +59,8 @@ export default class Index extends Component {
             const bookList = wx.cloud.database().collection('bookList');
             const reset = {
               borrowName: name,
-              borrowTime: time
+              borrowTime: time,
+              borrowDetail: this.props.userInfo
             }
             bookList.doc(bookInfo._id).update({
               data: reset,
@@ -93,6 +94,7 @@ export default class Index extends Component {
         <BorrowInfo
           borrowName={bookInfo.borrowName}
           borrowTime={bookInfo.borrowTime}
+          borrowDetail={bookInfo.borrowDetail}
         />
         <BookInfoView
           bookInfo={bookInfo.bookInfo}

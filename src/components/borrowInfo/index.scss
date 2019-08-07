@@ -7,3 +7,39 @@
     color: #1dab35;
   }
 }
+.flexBlock{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .pullIcon{
+    width: 18px;
+    height: 18px;
+    border-top: 4px solid #999;
+    border-right: 4px solid #999;
+    transform: rotateZ(45deg);
+  }
+  .pullDownState{
+    animation: 0.2s ease-out forwards pullDown;
+  }
+  .pullUpState{
+    animation: 0.2s ease-out forwards pullUp;
+  }
+}
+
+@keyframes pullDown {
+  0% {
+    transform: rotateZ(45deg);
+  }
+  100% {
+    transform: rotateZ(135deg);
+  }
+}
+
+@keyframes pullUp {
+  0% {
+    transform: rotateZ(135deg);
+  }
+  100% {
+    transform: rotateZ(45deg);
+  }
+}
