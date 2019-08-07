@@ -33,6 +33,11 @@ export default class Index extends Component {
     getBookInfo(this.props.isbn, (res) => {
       const bookInfo = res
       this.setState({bookInfo: bookInfo})
+      setTimeout(() => {
+        if (bookInfo.donateName) {
+          this.setState({donateToggle: true})
+        }
+      })
     })
   }
 
@@ -42,13 +47,6 @@ export default class Index extends Component {
 
   donateBook () {
     const { name, bookInfo } = this.state
-    if (bookInfo.donateName !== '' && bookInfo.donateName !== undefined) {
-      return Taro.showToast({
-        title: '当前书籍已记录捐赠人为' + bookInfo.donateName,
-        icon: 'none',
-        duration: 5000
-      })
-    }
     const bookName = '《' + bookInfo.bookInfo.title + '》'
     const contentText = name ? ('是否确定以' + name + '的名义捐赠' + bookName) : ('是否确定匿名捐赠' + bookName)
     Taro.showModal({
@@ -67,7 +65,11 @@ export default class Index extends Component {
               donateTime: time
             },
             success: () => {
-              this.setState({donateToggle: true})
+              const currentBookInfo = Object.assign({}, bookInfo, {
+                donateName: name || '匿名',
+                donateTime: time
+              })
+              this.setState({donateToggle: true, bookInfo: currentBookInfo})
               Taro.showToast({
                 title: '感谢您的捐赠',
                 icon: 'success',
@@ -85,21 +87,30 @@ export default class Index extends Component {
   }
 
   render () {
-    const { name, bookInfo } = this.state
+    const { name, bookInfo, donateToggle } = this.state
     return (
       <View className='index'>
         <View className='BtnGroup'>
           <Button className='btn' size='mini' type='primary' onClick={this.back}>返回</Button>
-          <Button disabled={this.state.donateToggle} className='btn' size='mini' type='primary' onClick={this.donateBook}>捐书</Button>
+          <Button disabled={donateToggle} className='btn' size='mini' type='primary' onClick={this.donateBook}>捐书</Button>
         </View>
-        <View className='donateName'>
-          <Text>当前捐书人:</Text>
-          <InputItem
-            value={name}
-            placeholder='请输入姓名'
-            onInput={this.handleInput.bind(this, 'name')}
-          />
-        </View>
+        {
+          !donateToggle &&
+          <View className='donateName'>
+            <Text>当前捐书人:</Text>
+            <InputItem
+              value={name}
+              placeholder='请输入姓名'
+              onInput={this.handleInput.bind(this, 'name')}
+            />
+          </View>
+        }
+        {
+          donateToggle &&
+          <View className='donateName'>
+            本书于{formatTime(bookInfo.donateTime, 'YYYY年MM月')},<Text className='heightLight'>{bookInfo.donateName}</Text>捐赠
+          </View>
+        }
         <BookInfoView
           bookInfo={bookInfo.bookInfo}
         />
