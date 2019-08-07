@@ -62,7 +62,7 @@ export default class Index extends Component {
           const reset = {
             borrowName: '',
             borrowTime: '',
-            borrowDetail: null,
+            borrowDetail: {},
           }
           bookList.doc(bookInfo._id).update({
             data: reset,
