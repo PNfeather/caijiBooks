@@ -16,7 +16,7 @@ export default class Index extends Component {
     bookList: []
   }
 
-  componentWillMount () {
+  componentDidShow () {
     this.setState({name: this.props.userInfo.name})
     wx.cloud.callFunction({
       name: 'bookList'
