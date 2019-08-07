@@ -8,20 +8,41 @@ export default class Index extends Component {
     navigationBarTitleText: '采集书库'
   }
 
-  componentWillMount () { }
+  state = {
+    bookList: []
+  }
 
-  componentDidMount () { }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-  // git remote add origin https://github.com/PNfeather/booksMange.git
-  componentDidHide () { }
+  componentWillMount () {
+    wx.cloud.callFunction({
+      name: 'bookList'
+    }).then(res => {
+      const bookList = res.result.data
+      this.setState({bookList: bookList})
+      console.log(res.result.data);
+    });
+  }
 
   render () {
+    const { bookList } = this.state
     return (
       <View className='index'>
-        <Text>Hello world!</Text>
+        <View
+          className='listItem'
+        >
+          <View className='cell padding-more'>书名</View>
+          <View className='cell'>借阅人</View>
+        </View>
+        {
+          bookList.map((item) => (
+            <View
+              key={item.id}
+              className='listItem'
+            >
+              <View className='col-7 cell'>《{item.bookInfo.title}》</View>
+              <View className={(item.borrowName ? '' : 'free ') + 'col-3 cell'}>{item.borrowName || '闲置'}</View>
+            </View>
+          ))
+        }
       </View>
     )
   }

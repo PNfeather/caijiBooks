@@ -1,0 +1,32 @@
+.index{
+  padding: 30px;
+  .listItem{
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    background: #f1f1f1;
+    border-radius: 8px;
+    .padding-more{
+      padding-left: 30px!important;
+    }
+    .col-7{
+      flex: 70% 0 0;
+      justify-content: flex-start;
+    }
+    .col-3{
+      flex: 30% 0 0;
+      justify-content: flex-end;
+      color: #2b0fff;
+    }
+    .free{
+      color: #1dab35;
+    }
+    .cell{
+      padding: 0 30px 0 20px;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
