@@ -15,9 +15,9 @@ exports.main = async (event, context) => {
   const tasks = [];
   const _ = db.command
   for (let i = 0; i < batchTimes; i++) {
-    const promise = db.collection('bookList').where({
-      donateName: _.neq('').and(_.neq(undefined))
-    }).skip(i * MAX_LIMIT).limit(MAX_LIMIT).get();
+    const promise = db.collection('bookList').skip(i * MAX_LIMIT).limit(MAX_LIMIT).where({
+      donateName: _.neq(null).and(_.neq(''))
+    }).get();
     tasks.push(promise);
   }
   // 等待所有
