@@ -13,7 +13,7 @@ export default class DonateInfo extends Component {
           !donateName &&
           <View className='donateName'>
             <Text className='heightLight'>
-              当前书籍还未捐赠入库
+              书库暂无次数，欢迎捐赠哦~
             </Text>
           </View>
         }

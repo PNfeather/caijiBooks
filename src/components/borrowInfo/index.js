@@ -35,10 +35,19 @@ export default class BorrowInfo extends Component {
             </View>
             {
               detailToggle &&
-              <View>
-                <View>借阅人头像: <Image src={borrowDetail.avatarUrl}></Image></View>
-                <View>借阅日期: {borrowTime}</View>
-                <View>借阅人昵称: {borrowDetail.nickName}</View>
+              <View className='detailInfo'>
+                <View className='border'>
+                  <View className='item'>借阅人信息: </View>
+                  <View className='item'>
+                    <View className='cell'>
+                      头像: <Image className='header' src={borrowDetail.avatarUrl} />
+                    </View>
+                    <View className='cell'>
+                      昵称: {borrowDetail.nickName}
+                    </View>
+                  </View>
+                  <View className='item'>借阅日期: {formatTime(borrowTime, 'YYYY年MM月DD日')}</View>
+                </View>
               </View>
             }
           </View>

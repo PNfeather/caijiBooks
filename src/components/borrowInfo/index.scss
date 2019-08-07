@@ -1,5 +1,5 @@
 .borrowName{
-  padding: 30px;
+  padding: 10px 30px;
   .heightLight{
     color: #a72dab;
   }
@@ -23,6 +23,30 @@
   }
   .pullUpState{
     animation: 0.2s ease-out forwards pullUp;
+  }
+}
+.detailInfo{
+  padding: 0 30px;
+  .border{
+    border-radius: 8px;
+    border: 2px solid #f1f1f1;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .item{
+    display: flex;
+    align-items: center;
+    .cell{
+      height: 80px;
+      flex: 1;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      .header{
+        width: 60px;
+        height: 60px;
+      }
+    }
   }
 }
 
