@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
-import { BookInfoView, InputItem } from '@components'
+import { BookInfoView, InputItem, DonateInfo } from '@components'
 import './index.scss'
 import getBookInfo from '@utils/getBookInfo'
 import { connect } from '@tarojs/redux'
@@ -107,9 +107,10 @@ export default class Index extends Component {
         }
         {
           donateToggle &&
-          <View className='donateName'>
-            本书于{formatTime(bookInfo.donateTime, 'YYYY年MM月')},<Text className='heightLight'>{bookInfo.donateName}</Text>捐赠
-          </View>
+          <DonateInfo
+            donateName={bookInfo.donateName}
+            donateTime={bookInfo.donateTime}
+          ></DonateInfo>
         }
         <BookInfoView
           bookInfo={bookInfo.bookInfo}
