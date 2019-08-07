@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
-import { BookInfoView } from '@components'
+import {View, Button, Text} from '@tarojs/components'
+import { BookInfoView, DonateInfo, BorrowInfo } from '@components'
 import './index.scss'
 import getBookInfo from '@utils/getBookInfo'
 import { connect } from '@tarojs/redux'
@@ -32,6 +32,11 @@ export default class Index extends Component {
     getBookInfo(this.props.isbn, (res) => {
       const bookInfo = res
       this.setState({bookInfo: bookInfo})
+      setTimeout(() => {
+        if (!bookInfo.donateName) {
+          this.setState({removeToggle: true})
+        }
+      })
     })
   }
 
@@ -48,16 +53,16 @@ export default class Index extends Component {
         duration: 5000
       })
     }
-    if (name !== bookInfo.donateName) {
+    if (bookInfo.donateName === '匿名') {
       return Taro.showToast({
-        title: '当前书籍不是已您的名义捐赠的哦~',
+        title: '当前书籍是匿名捐赠，无法撤捐哦~',
         icon: 'none',
         duration: 5000
       })
     }
-    if (bookInfo.donateName === '匿名') {
+    if (name !== bookInfo.donateName) {
       return Taro.showToast({
-        title: '当前书籍是匿名捐赠，无法撤捐哦~',
+        title: '当前书籍不是已您的名义捐赠的哦~',
         icon: 'none',
         duration: 5000
       })
@@ -103,15 +108,14 @@ export default class Index extends Component {
           <Button className='btn' size='mini' type='primary' onClick={this.back}>返回</Button>
           <Button disabled={this.state.removeToggle} className='btn' size='mini' type='primary' onClick={this.removeBook}>撤捐</Button>
         </View>
-        {
-          bookInfo.borrowName &&
-          <View className='donateName'>
-            当前借阅人: {bookInfo.borrowName}
-          </View>
-        }
-        <View className='donateName'>
-          当前捐书人: {bookInfo.donateName}
-        </View>
+        <DonateInfo
+          donateName={bookInfo.donateName}
+          donateTime={bookInfo.donateTime}
+        ></DonateInfo>
+        <BorrowInfo
+          borrowName={bookInfo.borrowName}
+          borrowTime={bookInfo.borrowTime}
+        ></BorrowInfo>
         <BookInfoView
           bookInfo={bookInfo.bookInfo}
         />
