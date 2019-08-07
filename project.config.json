@@ -2,8 +2,8 @@
 	"miniprogramRoot": "dist/",
 	"projectname": "caiji_books",
 	"description": "caiji_books",
-	"appid": "wx7768eeb4cd195067",
-  "cloudfunctionRoot": "functions/",
+	"appid": "wx25ae3998b8bc0354",
+	"cloudfunctionRoot": "functions/",
 	"setting": {
 		"urlCheck": true,
 		"es6": false,

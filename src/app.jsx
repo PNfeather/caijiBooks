@@ -15,7 +15,7 @@ const store = configStore()
 // }
 
 wx.cloud.init({
-  env: 'gongdohuan001-6f2aa5'
+  env: 'caijitushu-pajln'
 });
 
 class App extends Component {
