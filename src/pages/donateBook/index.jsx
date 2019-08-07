@@ -4,6 +4,7 @@ import { BookInfoView, InputItem } from '@components'
 import './index.scss'
 import getBookInfo from '@utils/getBookInfo'
 import { connect } from '@tarojs/redux'
+import formatTime from '@utils/formatTime'
 
 @connect(({user}) => {return {userInfo: user.userInfo} })
 
@@ -55,19 +56,25 @@ export default class Index extends Component {
       content: contentText,
     }).then(res => {
       if (res.confirm) {
-        const bookList = wx.cloud.database().collection('bookList');
-        bookList.doc(bookInfo._id).update({
-          data: {
-            donateName: name || '匿名'
-          },
-          success: () => {
-            this.setState({donateToggle: true})
-            Taro.showToast({
-              title: '感谢您的捐赠',
-              icon: 'success',
-              duration: 5000
-            })
-          }
+        wx.cloud.callFunction({
+          name: 'time'
+        }).then(timeRes => {
+          const time = formatTime(timeRes.result.time, 'YYYY-MM')
+          const bookList = wx.cloud.database().collection('bookList');
+          bookList.doc(bookInfo._id).update({
+            data: {
+              donateName: name || '匿名',
+              donateTime: time
+            },
+            success: () => {
+              this.setState({donateToggle: true})
+              Taro.showToast({
+                title: '感谢您的捐赠',
+                icon: 'success',
+                duration: 5000
+              })
+            }
+          });
         });
       }
     })
