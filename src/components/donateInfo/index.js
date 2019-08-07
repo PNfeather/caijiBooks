@@ -12,13 +12,15 @@ export default class DonateInfo extends Component {
         {
           !donateName &&
           <View className='donateName'>
-            当前书籍还未捐赠入库
+            <Text className='heightLight'>
+              当前书籍还未捐赠入库
+            </Text>
           </View>
         }
         {
           donateName &&
           <View className='donateName'>
-            本书于{formatTime(donateTime, 'YYYY年MM月')},<Text className='heightLight'>{donateName}</Text>捐赠
+            本书于{formatTime(donateTime, 'YYYY年MM月DD日')},<Text className='heightLight'>{donateName}</Text>捐赠
           </View>
         }
       </View>

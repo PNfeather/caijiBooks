@@ -18,7 +18,7 @@ export default class BorrowInfo extends Component {
         {
           borrowName &&
           <View className='borrowName'>
-            本书于{formatTime(borrowTime, 'YYYY年MM月')},<Text className='heightLight'>{borrowName}</Text>借阅
+            本书于{formatTime(borrowTime, 'YYYY年MM月DD日')},<Text className='heightLight'>{borrowName}</Text>借阅
           </View>
         }
       </View>

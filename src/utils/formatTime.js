@@ -9,7 +9,7 @@ function format (currentDate, fmt = 'YYYY-MM-DD HH:mm:ss') {
   }
   var o = {
     'M+': date.getMonth() + 1, // 月份
-    'd+': date.getDate(), // 日
+    'D+': date.getDate(), // 日
     'h+': date.getHours() % 12 === 0 ? 12 : date.getHours() % 12, // 小时
     'H+': date.getHours(), // 小时
     'm+': date.getMinutes(), // 分

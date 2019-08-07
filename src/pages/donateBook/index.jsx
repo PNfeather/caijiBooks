@@ -57,7 +57,7 @@ export default class Index extends Component {
         wx.cloud.callFunction({
           name: 'time'
         }).then(timeRes => {
-          const time = formatTime(timeRes.result.time, 'YYYY-MM')
+          const time = formatTime(timeRes.result.time, 'YYYY-MM-DD')
           const bookList = wx.cloud.database().collection('bookList');
           const reset = {
             donateName: name || '匿名',
