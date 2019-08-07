@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
-import { BookInfoView } from '@components'
+import { BookInfoView, DonateInfo, BorrowInfo } from '@components'
 import './index.scss'
 import getBookInfo from '@utils/getBookInfo'
 import { connect } from '@tarojs/redux'
@@ -20,7 +20,7 @@ export default class Index extends Component {
   state = {
     name: '',
     bookInfo: {},
-    repayToggle: false
+    repayToggle: true
   }
 
   componentWillMount () {
@@ -32,6 +32,11 @@ export default class Index extends Component {
     getBookInfo(this.props.isbn, (res) => {
       const bookInfo = res
       this.setState({bookInfo: bookInfo})
+      setTimeout(() => {
+        if (bookInfo.donateName && (this.state.name === bookInfo.borrowName)) {
+          this.setState({repayToggle: false})
+        }
+      })
     })
   }
 
@@ -41,13 +46,6 @@ export default class Index extends Component {
 
   repayBook () {
     const { name, bookInfo } = this.state
-    if (bookInfo.donateName === '' || bookInfo.donateName === undefined) {
-      return Taro.showToast({
-        title: '当前书籍还未捐赠入库，欢迎您捐赠哦~',
-        icon: 'none',
-        duration: 5000
-      })
-    }
     if (name !== bookInfo.borrowName) {
       return Taro.showToast({
         title: '您未借阅本书',
@@ -61,12 +59,15 @@ export default class Index extends Component {
     }).then(res => {
         if (res.confirm) {
           const bookList = wx.cloud.database().collection('bookList');
+          const reset = {
+            borrowName: '',
+            borrowTime: '',
+            borrowDetail: null,
+          }
           bookList.doc(bookInfo._id).update({
-            data: {
-              borrowName: ''
-            },
+            data: reset,
             success: () => {
-              const currentInfo = Object.assign({}, bookInfo, {borrowName: ''})
+              const currentInfo = Object.assign({}, bookInfo, reset)
               this.setState({repayToggle: true, bookInfo: currentInfo})
               Taro.showToast({
                 title: '您已归还书籍',
@@ -87,15 +88,18 @@ export default class Index extends Component {
           <Button className='btn' size='mini' type='primary' onClick={this.back}>返回</Button>
           <Button disabled={this.state.repayToggle} className='btn' size='mini' type='primary' onClick={this.repayBook}>还书</Button>
         </View>
+        <DonateInfo
+          donateName={bookInfo.donateName}
+          donateTime={bookInfo.donateTime}
+        />
         {
-          bookInfo.borrowName &&
-          <View className='donateName'>
-            当前借阅人: {bookInfo.borrowName}
-          </View>
+          bookInfo.donateName &&
+          <BorrowInfo
+            borrowName={bookInfo.borrowName}
+            borrowTime={bookInfo.borrowTime}
+            borrowDetail={bookInfo.borrowDetail}
+          />
         }
-        <View className='donateName'>
-          当前捐书人: {bookInfo.donateName}
-        </View>
         <BookInfoView
           bookInfo={bookInfo.bookInfo}
         />
