@@ -73,7 +73,6 @@ export default class Index extends Component {
             donateName: donateName,
             donateTime: time
           }
-          console.log(reset);
           bookList.doc(bookInfo._id).update({
             data: {moveInfo: {...reset}},
             success: () => {
