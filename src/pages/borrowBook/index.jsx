@@ -20,13 +20,15 @@ export default class Index extends Component {
 
   state = {
     name: '',
+    openId: '',
     bookInfo: {},
     borrowToggle: true
   }
 
   componentWillMount () {
     this.props.isbn = this.$router.params.isbn
-    this.setState({name: this.props.userInfo.name})
+    this.setState({name: this.props.userInfo.user.name})
+    this.setState({openId: this.props.userInfo._openid})
   }
 
   componentDidMount () {
@@ -34,7 +36,7 @@ export default class Index extends Component {
       const bookInfo = res
       this.setState({bookInfo: bookInfo})
       setTimeout(() => {
-        if (bookInfo.donateName && !bookInfo.borrowName) {
+        if (bookInfo.donateInfo && !bookInfo.borrowInfo) {
           this.setState({borrowToggle: false})
         }
       })
@@ -46,7 +48,7 @@ export default class Index extends Component {
   }
 
   borrowBook () {
-    const { name, bookInfo } = this.state
+    const { openId, name, bookInfo } = this.state
     Taro.showModal({
       title: '借书',
       content: '确认借阅《' + bookInfo.bookInfo.title + '》',
@@ -59,13 +61,16 @@ export default class Index extends Component {
             const bookList = wx.cloud.database().collection('bookList');
             const reset = {
               borrowName: name,
+              borrowOpenId: openId,
               borrowTime: time,
               borrowDetail: this.props.userInfo
             }
             bookList.doc(bookInfo._id).update({
-              data: reset,
+              data: {
+                borrowInfo: reset
+              },
               success: () => {
-                const currentInfo = Object.assign({}, bookInfo, reset)
+                const currentInfo = Object.assign({}, bookInfo, {borrowInfo: reset})
                 this.setState({borrowToggle: true, bookInfo: currentInfo})
                 Taro.showToast({
                   title: '借阅成功',
@@ -88,18 +93,11 @@ export default class Index extends Component {
           <Button disabled={this.state.borrowToggle} className='btn' size='mini' type='primary' onClick={this.borrowBook}>借书</Button>
         </View>
         <DonateInfo
-          donateName={bookInfo.donateName}
-          donateTime={bookInfo.donateTime}
-          donateType={bookInfo.donateType}
+          donateInfo={bookInfo.donateInfo}
         />
-        {
-          bookInfo.donateName &&
-          <BorrowInfo
-            borrowName={bookInfo.borrowName}
-            borrowTime={bookInfo.borrowTime}
-            borrowDetail={bookInfo.borrowDetail}
-          />
-        }
+        <BorrowInfo
+          borrowInfo={bookInfo.borrowInfo}
+        />
         <BookInfoView
           bookInfo={bookInfo.bookInfo}
         />

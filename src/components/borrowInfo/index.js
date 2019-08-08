@@ -16,6 +16,8 @@ export default class BorrowInfo extends Component {
   render () {
     const {borrowInfo} = this.props
     const {detailToggle} = this.state
+    let userInfo
+    detailToggle && ( userInfo = borrowInfo.borrowDetail.user )
     return (
       <View>
         {
@@ -40,10 +42,10 @@ export default class BorrowInfo extends Component {
                   <View className='item'>借阅人信息: </View>
                   <View className='item'>
                     <View className='cell'>
-                      头像: <Image className='header' src={borrowInfo.borrowDetail.avatarUrl} />
+                      头像: <Image className='header' src={userInfo.avatarUrl} />
                     </View>
                     <View className='cell'>
-                      昵称: {borrowInfo.borrowDetail.nickName}
+                      昵称: {userInfo.nickName}
                     </View>
                   </View>
                   <View className='item'>借阅日期: {formatTime(borrowInfo.borrowTime, 'YYYY年MM月DD日')}</View>
