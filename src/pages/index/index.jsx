@@ -12,6 +12,17 @@ export default class Index extends Component {
     navigationBarTitleText: '首页'
   }
 
+  onShareAppMessage (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    return {
+      title: '采集图书馆',
+      path: 'pages/login/index'
+    }
+  }
+
   scanBook (type) {
     Taro.scanCode().then((res) => {
       wx.navigateTo({
