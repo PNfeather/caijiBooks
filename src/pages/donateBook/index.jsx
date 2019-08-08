@@ -39,7 +39,7 @@ export default class Index extends Component {
       const bookInfo = res
       this.setState({bookInfo: bookInfo})
       setTimeout(() => {
-        if (bookInfo.donateName) {
+        if (bookInfo.moveInfo) {
           this.setState({donateToggle: true})
         }
       })
@@ -53,8 +53,9 @@ export default class Index extends Component {
   donateBook () {
     const { name, bookInfo, donateType } = this.state
     const bookName = '《' + bookInfo.bookInfo.title + '》'
-    let donateName = (donateType == 1) ? name : '公司采购'
-    const contentText = '是否确定以' + donateName + '的名义捐赠' + bookName
+    const donateName = (donateType == 1) ? name : '公司采购'
+    const donateText = (donateType == 1) ? (name + '捐赠') : '公司采购'
+    const contentText = '是否确定以' + donateText + '的名义添加' + bookName
     Taro.showModal({
       title: '捐书',
       content: contentText,
@@ -71,9 +72,9 @@ export default class Index extends Component {
             donateTime: time
           }
           bookList.doc(bookInfo._id).update({
-            data: reset,
+            data: {moveInfo: reset},
             success: () => {
-              const currentBookInfo = Object.assign({}, bookInfo, reset)
+              const currentBookInfo = Object.assign({}, bookInfo, {moveInfo: reset})
               this.setState({donateToggle: true, bookInfo: currentBookInfo})
               Taro.showToast({
                 title: '捐赠成功~',
@@ -117,9 +118,7 @@ export default class Index extends Component {
         {
           donateToggle &&
           <DonateInfo
-            donateName={bookInfo.donateName}
-            donateTime={bookInfo.donateTime}
-            donateType={bookInfo.donateType}
+            moveInfo={bookInfo.moveInfo}
           />
         }
         <BookInfoView

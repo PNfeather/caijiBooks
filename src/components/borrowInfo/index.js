@@ -14,22 +14,22 @@ export default class BorrowInfo extends Component {
   }
 
   render () {
-    const {borrowName, borrowTime, borrowDetail} = this.props
+    const {moveInfo} = this.props
     const {detailToggle} = this.state
     return (
       <View>
         {
-          !borrowName &&
+          !moveInfo.borrowName &&
           <View className='borrowName'>
             <Text className='free'>当前书籍空置状态</Text>
           </View>
         }
         {
-          borrowName &&
+          moveInfo.borrowName &&
           <View>
             <View className='borrowName flexBlock' onClick={this.changeToggle.bind(this)}>
               <View>
-                当前借阅人: <Text className='heightLight'>{borrowName}</Text>
+                当前借阅人: <Text className='heightLight'>{moveInfo.borrowName}</Text>
               </View>
               <View className={'pullIcon ' + (detailToggle ? 'pullDownState' : 'pullUpState')} />
             </View>
@@ -40,13 +40,13 @@ export default class BorrowInfo extends Component {
                   <View className='item'>借阅人信息: </View>
                   <View className='item'>
                     <View className='cell'>
-                      头像: <Image className='header' src={borrowDetail.avatarUrl} />
+                      头像: <Image className='header' src={moveInfo.borrowDetail.avatarUrl} />
                     </View>
                     <View className='cell'>
-                      昵称: {borrowDetail.nickName}
+                      昵称: {moveInfo.borrowDetail.nickName}
                     </View>
                   </View>
-                  <View className='item'>借阅日期: {formatTime(borrowTime, 'YYYY年MM月DD日')}</View>
+                  <View className='item'>借阅日期: {formatTime(moveInfo.borrowTime, 'YYYY年MM月DD日')}</View>
                 </View>
               </View>
             }

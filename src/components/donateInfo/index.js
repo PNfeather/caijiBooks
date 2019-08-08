@@ -6,11 +6,11 @@ import formatTime from '@utils/formatTime'
 export default class DonateInfo extends Component {
 
   render () {
-    const {donateType, donateName, donateTime} = this.props
+    const {moveInfo} = this.props
     return (
       <View>
         {
-          !donateName &&
+          !moveInfo.donateName &&
           <View className='donateName'>
             <Text className='heightLight'>
               书库暂无次数，欢迎捐赠哦~
@@ -18,9 +18,9 @@ export default class DonateInfo extends Component {
           </View>
         }
         {
-          donateName &&
+          moveInfo.donateName &&
           <View className='donateName'>
-            本书于{formatTime(donateTime, 'YYYY年MM月DD日')},<Text className='heightLight'>{donateName}</Text>{donateType == 2 ? '' : '捐赠'}
+            本书于{formatTime(moveInfo.donateTime, 'YYYY年MM月DD日')},<Text className='heightLight'>{moveInfo.donateName}</Text>{moveInfo.donateType == 2 ? '' : '捐赠'}
           </View>
         }
       </View>
