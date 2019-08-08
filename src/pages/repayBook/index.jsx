@@ -66,7 +66,7 @@ export default class Index extends Component {
             },
             success: () => {
               const currentInfo = {...bookInfo}
-              delete currentInfo.borrowInfo
+              currentInfo.borrowInfo = ''
               this.setState({repayToggle: true, bookInfo: currentInfo})
               Taro.showToast({
                 title: '您已归还书籍',

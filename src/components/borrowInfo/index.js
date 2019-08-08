@@ -18,7 +18,6 @@ export default class BorrowInfo extends Component {
     const {detailToggle} = this.state
     let userInfo
     borrowInfo && ( userInfo = borrowInfo.borrowDetail.user )
-    console.log(borrowInfo);
     return (
       <View>
         {
