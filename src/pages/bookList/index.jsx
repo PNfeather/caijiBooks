@@ -12,7 +12,7 @@ export default class Index extends Component {
   }
 
   state = {
-    name: '',
+    openId: '',
     bookList: []
   }
 
@@ -28,7 +28,7 @@ export default class Index extends Component {
   }
 
   componentDidShow () {
-    this.setState({name: this.props.userInfo.name})
+    this.setState({openId: this.props.userInfo._openid})
     wx.cloud.callFunction({
       name: 'bookList'
     }).then(res => {
@@ -41,8 +41,8 @@ export default class Index extends Component {
   goDetail (item) {
     let detailType = 'borrowBook'
     const isbn = item.isbn
-    const {name} = this.state
-    if (item.borrowName === name) {
+    const {openId} = this.state
+    if (item.borrowInfo && (item.borrowInfo.borrowOpenId === openId)) {
       detailType = 'repayBook'
     }
     wx.navigateTo({
@@ -68,7 +68,7 @@ export default class Index extends Component {
               onClick={this.goDetail.bind(this, item)}
             >
               <View className='col-7 cell'>《{item.bookInfo.title}》</View>
-              <View className={(item.borrowName ? '' : 'free ') + 'col-3 cell'}>{item.borrowName || '闲置'}</View>
+              <View className={(item.borrowInfo ? '' : 'free ') + 'col-3 cell'}>{item.borrowInfo ? item.borrowInfo.borrowName : '闲置'}</View>
             </View>
           ))
         }
