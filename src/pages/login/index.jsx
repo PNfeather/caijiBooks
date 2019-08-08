@@ -75,7 +75,7 @@ export default class Index extends Component {
       if (res.data.length === 0) {
         this.setState({ authorization: true , btnText: '登录'})
       } else {
-        this.changeAndStoreUserInfo(res.data[0].user)
+        this.changeAndStoreUserInfo(res.data[0])
         Taro.switchTab({
           url: '/pages/index/index'
         })

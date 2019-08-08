@@ -24,6 +24,7 @@ export default class Index extends Component {
       {text: '公司采购', type: 2},
     ],
     name: '',
+    openId: '',
     bookInfo: {},
     donateToggle: false,
     donateType: 1
@@ -31,7 +32,8 @@ export default class Index extends Component {
 
   componentWillMount () {
     this.props.isbn = this.$router.params.isbn
-    this.setState({name: this.props.userInfo.name})
+    this.setState({name: this.props.userInfo.user.name})
+    this.setState({openId: this.props.userInfo._openid})
   }
 
   componentDidMount () {
@@ -51,11 +53,10 @@ export default class Index extends Component {
   }
 
   donateBook () {
-    const { name, bookInfo, donateType } = this.state
+    const { name, bookInfo, donateType, openId } = this.state
     const bookName = '《' + bookInfo.bookInfo.title + '》'
     const donateName = (donateType == 1) ? name : '公司采购'
-    const donateText = (donateType == 1) ? (name + '捐赠') : '公司采购'
-    const contentText = '是否确定以' + donateText + '的名义添加' + bookName
+    const contentText = '是否确定以' + donateName + '的名义添加' + bookName
     Taro.showModal({
       title: '捐书',
       content: contentText,
@@ -67,12 +68,14 @@ export default class Index extends Component {
           const time = formatTime(timeRes.result.time, 'YYYY-MM-DD')
           const bookList = wx.cloud.database().collection('bookList');
           const reset = {
+            donateOpenId: openId,
             donateType: donateType,
             donateName: donateName,
             donateTime: time
           }
+          console.log(reset);
           bookList.doc(bookInfo._id).update({
-            data: {moveInfo: reset},
+            data: {moveInfo: {...reset}},
             success: () => {
               const currentBookInfo = Object.assign({}, bookInfo, {moveInfo: reset})
               this.setState({donateToggle: true, bookInfo: currentBookInfo})
