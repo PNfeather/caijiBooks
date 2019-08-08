@@ -18,14 +18,14 @@ export default class Index extends Component {
   }
 
   state = {
-    name: '',
+    openId: '',
     bookInfo: {},
     repayToggle: true
   }
 
   componentWillMount () {
     this.props.isbn = this.$router.params.isbn
-    this.setState({name: this.props.userInfo.name})
+    this.setState({openId: this.props.userInfo._openid})
   }
 
   componentDidMount () {
@@ -33,7 +33,7 @@ export default class Index extends Component {
       const bookInfo = res
       this.setState({bookInfo: bookInfo})
       setTimeout(() => {
-        if (bookInfo.donateName && (this.state.name === bookInfo.borrowName)) {
+        if (bookInfo.borrowInfo) {
           this.setState({repayToggle: false})
         }
       })
@@ -45,10 +45,10 @@ export default class Index extends Component {
   }
 
   repayBook () {
-    const { name, bookInfo } = this.state
-    if (name !== bookInfo.borrowName) {
+    const { openId, bookInfo } = this.state
+    if(openId !== bookInfo.borrowInfo.borrowOpenId) {
       return Taro.showToast({
-        title: '您未借阅本书',
+        title: '借书使用的微信才可以归还本书哦~',
         icon: 'none',
         duration: 5000
       })
@@ -59,15 +59,14 @@ export default class Index extends Component {
     }).then(res => {
         if (res.confirm) {
           const bookList = wx.cloud.database().collection('bookList');
-          const reset = {
-            borrowName: '',
-            borrowTime: '',
-            borrowDetail: {},
-          }
+          const _ = wx.cloud.database().command
           bookList.doc(bookInfo._id).update({
-            data: reset,
+            data: {
+              borrowInfo: _.remove()
+            },
             success: () => {
-              const currentInfo = Object.assign({}, bookInfo, reset)
+              const currentInfo = {...bookInfo}
+              delete currentInfo.borrowInfo
               this.setState({repayToggle: true, bookInfo: currentInfo})
               Taro.showToast({
                 title: '您已归还书籍',
@@ -89,16 +88,12 @@ export default class Index extends Component {
           <Button disabled={this.state.repayToggle} className='btn' size='mini' type='primary' onClick={this.repayBook}>还书</Button>
         </View>
         <DonateInfo
-          donateName={bookInfo.donateName}
-          donateTime={bookInfo.donateTime}
-          donateType={bookInfo.donateType}
+          donateInfo={bookInfo.donateInfo}
         />
         {
-          bookInfo.donateName &&
+          bookInfo.donateInfo &&
           <BorrowInfo
-            borrowName={bookInfo.borrowName}
-            borrowTime={bookInfo.borrowTime}
-            borrowDetail={bookInfo.borrowDetail}
+            borrowInfo={bookInfo.borrowInfo}
           />
         }
         <BookInfoView

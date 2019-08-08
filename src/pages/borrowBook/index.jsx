@@ -95,9 +95,12 @@ export default class Index extends Component {
         <DonateInfo
           donateInfo={bookInfo.donateInfo}
         />
-        <BorrowInfo
-          borrowInfo={bookInfo.borrowInfo}
-        />
+        {
+          bookInfo.donateInfo &&
+          <BorrowInfo
+            borrowInfo={bookInfo.borrowInfo}
+          />
+        }
         <BookInfoView
           bookInfo={bookInfo.bookInfo}
         />
