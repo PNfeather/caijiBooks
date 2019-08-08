@@ -9,6 +9,7 @@
     "css": "sass"
   },
   "scripts": {
+    "add_commit_push": "git go 'go'",
     "build:weapp": "taro build --type weapp",
     "build:swan": "taro build --type swan",
     "build:alipay": "taro build --type alipay",
