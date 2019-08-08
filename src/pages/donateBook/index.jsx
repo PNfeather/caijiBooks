@@ -51,9 +51,10 @@ export default class Index extends Component {
   }
 
   donateBook () {
-    const { name, bookInfo } = this.state
+    const { name, bookInfo, donateType } = this.state
     const bookName = '《' + bookInfo.bookInfo.title + '》'
-    const contentText = name ? ('是否确定以' + name + '的名义捐赠' + bookName) : ('是否确定匿名捐赠' + bookName)
+    let donateName = (donateType == 1) ? name : '公司采购'
+    const contentText = '是否确定以' + donateName + '的名义捐赠' + bookName
     Taro.showModal({
       title: '捐书',
       content: contentText,
@@ -65,7 +66,8 @@ export default class Index extends Component {
           const time = formatTime(timeRes.result.time, 'YYYY-MM-DD')
           const bookList = wx.cloud.database().collection('bookList');
           const reset = {
-            donateName: name || '匿名',
+            donateType: donateType,
+            donateName: donateName,
             donateTime: time
           }
           bookList.doc(bookInfo._id).update({
@@ -74,7 +76,7 @@ export default class Index extends Component {
               const currentBookInfo = Object.assign({}, bookInfo, reset)
               this.setState({donateToggle: true, bookInfo: currentBookInfo})
               Taro.showToast({
-                title: '感谢您的捐赠',
+                title: '捐赠成功~',
                 icon: 'success',
                 duration: 5000
               })
@@ -85,12 +87,8 @@ export default class Index extends Component {
     })
   }
 
-  handleInput = (key, value) => {
-    this.setState({ [key]: value })
-  }
-
   render () {
-    const { name, bookInfo, donateToggle, donateType, donateList } = this.state
+    const { bookInfo, donateToggle, donateType, donateList } = this.state
     return (
       <View className='index'>
         <View className='BtnGroup'>
@@ -114,11 +112,6 @@ export default class Index extends Component {
                 })
               }
             </View>
-            {/*<InputItem
-              value={name}
-              placeholder='请输入姓名'
-              onInput={this.handleInput.bind(this, 'name')}
-            />*/}
           </View>
         }
         {
