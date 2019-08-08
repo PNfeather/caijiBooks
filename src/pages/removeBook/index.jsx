@@ -77,6 +77,7 @@ export default class Index extends Component {
         const reset = {
           donateName: '',
           donateTime: '',
+          donateType: '',
           borrowName: '',
           borrowTime: ''
         }
