@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
-import { BookInfoView, InputItem, DonateInfo, CheckboxItem } from '@components'
+import { BookInfoView, DonateInfo, CheckboxItem } from '@components'
 import './index.scss'
 import getBookInfo from '@utils/getBookInfo'
 import { connect } from '@tarojs/redux'
@@ -119,7 +119,8 @@ export default class Index extends Component {
           <DonateInfo
             donateName={bookInfo.donateName}
             donateTime={bookInfo.donateTime}
-          ></DonateInfo>
+            donateType={bookInfo.donateType}
+          />
         }
         <BookInfoView
           bookInfo={bookInfo.bookInfo}
