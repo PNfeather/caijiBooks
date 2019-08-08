@@ -41,7 +41,7 @@ export default class Index extends Component {
       const bookInfo = res
       this.setState({bookInfo: bookInfo})
       setTimeout(() => {
-        if (bookInfo.moveInfo) {
+        if (bookInfo.donateInfo) {
           this.setState({donateToggle: true})
         }
       })
@@ -74,9 +74,9 @@ export default class Index extends Component {
             donateTime: time
           }
           bookList.doc(bookInfo._id).update({
-            data: {moveInfo: {...reset}},
+            data: {donateInfo: {...reset}},
             success: () => {
-              const currentBookInfo = Object.assign({}, bookInfo, {moveInfo: reset})
+              const currentBookInfo = Object.assign({}, bookInfo, {donateInfo: reset})
               this.setState({donateToggle: true, bookInfo: currentBookInfo})
               Taro.showToast({
                 title: '捐赠成功~',
@@ -120,7 +120,7 @@ export default class Index extends Component {
         {
           donateToggle &&
           <DonateInfo
-            moveInfo={bookInfo.moveInfo}
+            donateInfo={bookInfo.donateInfo}
           />
         }
         <BookInfoView

@@ -33,7 +33,7 @@ export default class Index extends Component {
       const bookInfo = res
       this.setState({bookInfo: bookInfo})
       setTimeout(() => {
-        if (bookInfo.moveInfo) {
+        if (bookInfo.donateInfo) {
           this.setState({removeToggle: false})
         }
       })
@@ -46,22 +46,22 @@ export default class Index extends Component {
 
   removeBook () {
     const { openId, bookInfo } = this.state
-    const { moveInfo } = bookInfo
-    if (moveInfo.donateType === 2) {
+    const { donateInfo, borrowInfo } = bookInfo
+    if (donateInfo.donateType === 2) {
       return Taro.showToast({
         title: '当前书籍是公司采购无法撤捐哦~',
         icon: 'none',
         duration: 5000
       })
     }
-    if (openId !== moveInfo.donateOpenId) {
+    if (openId !== donateInfo.donateOpenId) {
       return Taro.showToast({
         title: '当前书籍不是已您的名义捐赠的哦~',
         icon: 'none',
         duration: 5000
       })
     }
-    if (moveInfo.borrowOpenId && (moveInfo.borrowOpenId !== openId)) {
+    if (borrowInfo && (borrowInfo.borrowOpenId !== openId)) {
       return Taro.showToast({
         title: '书籍' + bookInfo.borrowName + '借阅中，请先联系借阅人换书才可撤捐哦' ,
         icon: 'none',
@@ -78,13 +78,11 @@ export default class Index extends Component {
         const _ = wx.cloud.database().command
         bookList.doc(bookInfo._id).update({
           data: {
-            moveInfo: _.remove()
+            donateInfo: _.remove(),
+            borrowInfo: _.remove()
           },
           success: () => {
-            let currentInfo = {...bookInfo}
-            delete currentInfo.moveInfo
-            console.log(currentInfo);
-            this.setState({removeToggle: true, bookInfo: currentInfo})
+            this.setState({removeToggle: true})
             Taro.showToast({
               title: '您已撤销了本书的捐赠',
               icon: 'success',
@@ -108,10 +106,10 @@ export default class Index extends Component {
           !removeToggle &&
           <View>
             <DonateInfo
-              moveInfo={bookInfo.moveInfo}
+              donateInfo={bookInfo.donateInfo}
             />
             <BorrowInfo
-              bookInfo={bookInfo.bookInfo}
+              borrowInfo={bookInfo.borrowInfo}
             />
           </View>
         }
