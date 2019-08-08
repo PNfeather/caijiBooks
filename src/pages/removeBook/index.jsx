@@ -18,14 +18,14 @@ export default class Index extends Component {
   }
 
   state = {
-    name: '',
     bookInfo: {},
+    openId: '',
     removeToggle: true
   }
 
   componentWillMount () {
     this.props.isbn = this.$router.params.isbn
-    this.setState({name: this.props.userInfo.name})
+    this.setState({openId: this.props.userInfo._openid})
   }
 
   componentDidMount () {
@@ -33,7 +33,7 @@ export default class Index extends Component {
       const bookInfo = res
       this.setState({bookInfo: bookInfo})
       setTimeout(() => {
-        if (bookInfo.donateName) {
+        if (bookInfo.moveInfo) {
           this.setState({removeToggle: false})
         }
       })
@@ -45,22 +45,23 @@ export default class Index extends Component {
   }
 
   removeBook () {
-    const { name, bookInfo } = this.state
-    if (bookInfo.donateName === '匿名') {
+    const { openId, bookInfo } = this.state
+    const { moveInfo } = bookInfo
+    if (moveInfo.donateType === 2) {
       return Taro.showToast({
-        title: '当前书籍是匿名捐赠，无法撤捐哦~',
+        title: '当前书籍是公司采购无法撤捐哦~',
         icon: 'none',
         duration: 5000
       })
     }
-    if (name !== bookInfo.donateName) {
+    if (openId !== moveInfo.donateOpenId) {
       return Taro.showToast({
         title: '当前书籍不是已您的名义捐赠的哦~',
         icon: 'none',
         duration: 5000
       })
     }
-    if (bookInfo.borrowName && (bookInfo.borrowName !== name)) {
+    if (moveInfo.borrowOpenId && (moveInfo.borrowOpenId !== openId)) {
       return Taro.showToast({
         title: '书籍' + bookInfo.borrowName + '借阅中，请先联系借阅人换书才可撤捐哦' ,
         icon: 'none',
@@ -74,17 +75,15 @@ export default class Index extends Component {
     }).then(res => {
       if (res.confirm) {
         const bookList = wx.cloud.database().collection('bookList');
-        const reset = {
-          donateName: '',
-          donateTime: '',
-          donateType: '',
-          borrowName: '',
-          borrowTime: ''
-        }
+        const _ = wx.cloud.database().command
         bookList.doc(bookInfo._id).update({
-          data: reset,
+          data: {
+            moveInfo: _.remove()
+          },
           success: () => {
-            const currentInfo = Object.assign({}, bookInfo, reset)
+            let currentInfo = {...bookInfo}
+            delete currentInfo.moveInfo
+            console.log(currentInfo);
             this.setState({removeToggle: true, bookInfo: currentInfo})
             Taro.showToast({
               title: '您已撤销了本书的捐赠',
@@ -105,17 +104,16 @@ export default class Index extends Component {
           <Button className='btn' size='mini' type='primary' onClick={this.back}>返回</Button>
           <Button disabled={removeToggle} className='btn' size='mini' type='primary' onClick={this.removeBook}>撤捐</Button>
         </View>
-        <DonateInfo
-          donateName={bookInfo.donateName}
-          donateTime={bookInfo.donateTime}
-        />
         {
           !removeToggle &&
-          <BorrowInfo
-            borrowName={bookInfo.borrowName}
-            borrowTime={bookInfo.borrowTime}
-            borrowDetail={bookInfo.borrowDetail}
-          />
+          <View>
+            <DonateInfo
+              moveInfo={bookInfo.moveInfo}
+            />
+            <BorrowInfo
+              bookInfo={bookInfo.bookInfo}
+            />
+          </View>
         }
         <BookInfoView
           bookInfo={bookInfo.bookInfo}
