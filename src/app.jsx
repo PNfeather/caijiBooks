@@ -22,12 +22,16 @@ class App extends Component {
 
   config = {
     pages: [
+
+      'pages/donateBook/index',
+
+
       'pages/login/index',
       'pages/index/index',
       'pages/bookList/index',
       'pages/borrowBook/index',
       'pages/repayBook/index',
-      'pages/donateBook/index',
+      // 'pages/donateBook/index',
       'pages/removeBook/index',
     ],
     window: {

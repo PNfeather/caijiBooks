@@ -10,6 +10,15 @@
 }
 .donateName{
   padding: 30px;
+  .donateCheck{
+    display: flex;
+    align-items: center;
+    height: 80px;
+    .checkItem{
+      flex: 1;
+      justify-content: flex-start;
+    }
+  }
   .heightLight{
     color: #a72dab;
   }

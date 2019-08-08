@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
-import { BookInfoView, InputItem, DonateInfo } from '@components'
+import { BookInfoView, InputItem, DonateInfo, CheckboxItem } from '@components'
 import './index.scss'
 import getBookInfo from '@utils/getBookInfo'
 import { connect } from '@tarojs/redux'
@@ -19,9 +19,14 @@ export default class Index extends Component {
   }
 
   state = {
+    donateList: [
+      {text: '个人', type: 1},
+      {text: '公司采购', type: 2},
+    ],
     name: '',
     bookInfo: {},
-    donateToggle: false
+    donateToggle: false,
+    donateType: 1
   }
 
   componentWillMount () {
@@ -85,7 +90,7 @@ export default class Index extends Component {
   }
 
   render () {
-    const { name, bookInfo, donateToggle } = this.state
+    const { name, bookInfo, donateToggle, donateType, donateList } = this.state
     return (
       <View className='index'>
         <View className='BtnGroup'>
@@ -95,12 +100,25 @@ export default class Index extends Component {
         {
           !donateToggle &&
           <View className='donateName'>
-            <Text>当前捐书人:</Text>
-            <InputItem
+            <Text>捐赠选择:</Text>
+            <View className='donateCheck'>
+              {
+                donateList.map((item, index) => {
+                  return <View className='checkItem' key={index}>
+                    <CheckboxItem
+                      checkText={item.text}
+                      checked={donateType === item.type}
+                      onClick={() => this.setState({donateType: item.type})}
+                    />
+                  </View>
+                })
+              }
+            </View>
+            {/*<InputItem
               value={name}
               placeholder='请输入姓名'
               onInput={this.handleInput.bind(this, 'name')}
-            />
+            />*/}
           </View>
         }
         {
