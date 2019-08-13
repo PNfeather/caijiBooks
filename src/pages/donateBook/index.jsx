@@ -73,9 +73,15 @@ export default class Index extends Component {
             donateName: donateName,
             donateTime: time
           }
-          bookList.doc(bookInfo._id).update({
-            data: {donateInfo: {...reset}},
-            success: () => {
+          console.log('进入');
+          wx.cloud.callFunction({
+            name: 'updateBook',
+            data: {
+              id: bookInfo._id,
+              updateInfo: {donateInfo: {...reset}},
+            },
+            success: (result) => {
+              console.log(result);
               const currentBookInfo = Object.assign({}, bookInfo, {donateInfo: reset})
               this.setState({donateToggle: true, bookInfo: currentBookInfo})
               Taro.showToast({
@@ -84,7 +90,7 @@ export default class Index extends Component {
                 duration: 5000
               })
             }
-          });
+          })
         });
       }
     })
