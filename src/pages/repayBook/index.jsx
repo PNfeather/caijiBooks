@@ -58,11 +58,11 @@ export default class Index extends Component {
       content: '确认归还《' + bookInfo.bookInfo.title + '》',
     }).then(res => {
         if (res.confirm) {
-          const bookList = wx.cloud.database().collection('bookList');
-          const _ = wx.cloud.database().command
-          bookList.doc(bookInfo._id).update({
+          wx.cloud.callFunction({
+            name: 'updateBook',
             data: {
-              borrowInfo: _.remove()
+              id: bookInfo._id,
+              type: 'repay',
             },
             success: () => {
               const currentInfo = {...bookInfo}
@@ -74,7 +74,7 @@ export default class Index extends Component {
                 duration: 5000
               })
             }
-          });
+          })
         }
       })
   }

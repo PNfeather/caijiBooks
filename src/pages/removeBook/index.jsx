@@ -74,14 +74,14 @@ export default class Index extends Component {
       content: '确认撤销《' + bookInfo.bookInfo.title + '》的捐赠',
     }).then(res => {
       if (res.confirm) {
-        const bookList = wx.cloud.database().collection('bookList');
-        const _ = wx.cloud.database().command
-        bookList.doc(bookInfo._id).update({
+        wx.cloud.callFunction({
+          name: 'updateBook',
           data: {
-            donateInfo: _.remove(),
-            borrowInfo: _.remove()
+            id: bookInfo._id,
+            type: 'remove'
           },
-          success: () => {
+          success: (result) => {
+            console.log(result);
             this.setState({removeToggle: true})
             Taro.showToast({
               title: '您已撤销了本书的捐赠',
@@ -89,7 +89,7 @@ export default class Index extends Component {
               duration: 5000
             })
           }
-        });
+        })
       }
     })
   }

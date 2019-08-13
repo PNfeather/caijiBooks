@@ -58,16 +58,17 @@ export default class Index extends Component {
             name: 'time'
           }).then(timeRes => {
             const time = formatTime(timeRes.result.time, 'YYYY-MM-DD')
-            const bookList = wx.cloud.database().collection('bookList');
             const reset = {
               borrowName: name,
               borrowOpenId: openId,
               borrowTime: time,
               borrowDetail: this.props.userInfo
             }
-            bookList.doc(bookInfo._id).update({
+            wx.cloud.callFunction({
+              name: 'updateBook',
               data: {
-                borrowInfo: reset
+                id: bookInfo._id,
+                updateInfo: {borrowInfo: {...reset}},
               },
               success: () => {
                 const currentInfo = Object.assign({}, bookInfo, {borrowInfo: reset})

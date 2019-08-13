@@ -66,22 +66,19 @@ export default class Index extends Component {
           name: 'time'
         }).then(timeRes => {
           const time = formatTime(timeRes.result.time, 'YYYY-MM-DD')
-          const bookList = wx.cloud.database().collection('bookList');
           const reset = {
             donateOpenId: openId,
             donateType: donateType,
             donateName: donateName,
             donateTime: time
           }
-          console.log('进入');
           wx.cloud.callFunction({
             name: 'updateBook',
             data: {
               id: bookInfo._id,
               updateInfo: {donateInfo: {...reset}},
             },
-            success: (result) => {
-              console.log(result);
+            success: () => {
               const currentBookInfo = Object.assign({}, bookInfo, {donateInfo: reset})
               this.setState({donateToggle: true, bookInfo: currentBookInfo})
               Taro.showToast({
