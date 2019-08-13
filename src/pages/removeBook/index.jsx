@@ -80,8 +80,7 @@ export default class Index extends Component {
             id: bookInfo._id,
             type: 'remove'
           },
-          success: (result) => {
-            console.log(result);
+          success: () => {
             this.setState({removeToggle: true})
             Taro.showToast({
               title: '您已撤销了本书的捐赠',
